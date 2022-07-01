@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>tail -f {{ file }}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='assets/styles/default.css')}}">
+    <link rel="icon" href="{{url_for('static', filename='assets/favicon.ico')}}">
+</head>
+
+<body>
+    <nav class="topbar navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-8">
+                    <span class="navbar-brand text-overflow" title="{{ file }}">tail -f {{ file }}</span>
+                </div>
+                <div class="col-sm-1 text-right">
+                    <button type="button" class="btn btn-light btn-pause" data-toggle="button" aria-pressed="false" autocomplete="off"></button>
+                </div>
+                <div class="col-sm-3">
+                    <form class="navbar-form-custom" role="search" onkeypress="return event.keyCode != 13;">
+                        <input type="text" class="form-control query" placeholder="Filter" tabindex="1">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid no-horiz-padding">
+        <pre class="log"></pre>
+    </div>
+
+    <script src="{{url_for('static', filename='assets/js/socket.io.min.js')}}"></script>
+    <script src="{{url_for('static', filename='assets/js/tinycon.min.js')}}"></script>
+    <script src="{{url_for('static', filename='assets/js/ansi_up.js')}}"></script>
+    <script src="{{url_for('static', filename='assets/js/app.js')}}"></script>
+    <script type="text/javascript">
+        var socket = io('/tail')
+        socket.on('connect', function() {
+            setInterval(function () {
+                socket.emit('msg')
+            }, 1000)
+        });
+
+        window.load = App.init({
+            socket: socket,
+            container: document.getElementsByClassName('log')[0],
+            filterInput: document.getElementsByClassName('query')[0],
+            pauseBtn: document.getElementsByClassName('btn-pause')[0],
+            topbar: document.getElementsByClassName('topbar')[0],
+            body: document.getElementsByTagName('body')[0]
+        });
+    </script>
+</body>
+
+</html>
