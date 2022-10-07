@@ -1,5 +1,4 @@
 include main.py
 include config/*
 include requirements.txt
-recursive-include src/web/templates *
-recursive-include src/web/static *
+recursive-include src/web/ *
