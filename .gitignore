@@ -6,3 +6,4 @@ venv/
 dist/
 sdist/
 *.egg-info/
+log/
