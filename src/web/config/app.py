@@ -1,4 +1,7 @@
+import json
 from configparser import SectionProxy
+
+PATH_WHITE_LIST = []
 
 
 class AppConfig(object):
@@ -7,6 +10,20 @@ class AppConfig(object):
     FILE_NAME = '/var/log/syslog'
     USER = ''
     PASSWD = ''
+    LINES = 100
+
+
+def set_line_conf(lines: int):
+    AppConfig.LINES = lines
+
+
+def set_file_conf(path: str):
+    AppConfig.FILE_NAME = path
+
+
+def set_path_with_list(path: SectionProxy):
+    global PATH_WHITE_LIST
+    PATH_WHITE_LIST = json.loads(path["WHITE_LIST"])
 
 
 def set_config(host: str, port: int, file_name: str, auth: SectionProxy):

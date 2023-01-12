@@ -22,6 +22,12 @@ window.App = (function app(window, document) {
   var _filterInput;
 
   /**
+   * @type {HTMLElement}
+   * @private
+   */
+  var _selectFile;
+
+  /**
    * @type {String}
    * @private
    */
@@ -226,6 +232,7 @@ window.App = (function app(window, document) {
       _pauseBtn = opts.pauseBtn;
       _topbar = opts.topbar;
       _body = opts.body;
+      _selectFile = opts.selectFile;
 
       _setFilterValueFromURL(_filterInput, window.location.toString());
 
@@ -240,6 +247,12 @@ window.App = (function app(window, document) {
         }
         _setFilterParam(_filterValue, window.location.toString());
         _filterLogs();
+      });
+
+      _selectFile.addEventListener('change', function(e) {
+        _logContainer.innerHTML = ""
+        _body.querySelector("#f-tail").innerHTML = _selectFile.value
+        opts.socket.emit("set_file", _selectFile.value)
       });
 
       // Pause button bind

@@ -2,6 +2,7 @@ from flask import Blueprint, render_template
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
 from ..config.app import AppConfig
+from src.web.config import app
 
 tail = Blueprint('', __name__)
 auth = HTTPBasicAuth()
@@ -20,5 +21,5 @@ def verify_password(username, password):
 @tail.route('/')
 @auth.login_required
 def home():
-    res = {"file": AppConfig.FILE_NAME}
+    res = {"file": AppConfig.FILE_NAME, "files": app.PATH_WHITE_LIST}
     return render_template('home/index.html', **res)

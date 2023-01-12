@@ -14,4 +14,5 @@ if __name__ == '__main__':
     config_parse = configparser.ConfigParser()
     config_parse.read(args.config)
     config_app.set_config(args.host, args.port, args.file, config_parse['BASE_AUTH'])
+    config_app.set_path_with_list(config_parse['PATH'])
     app.run_web()

@@ -13,11 +13,29 @@
     <nav class="topbar navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-8">
-                    <span class="navbar-brand text-overflow" title="{{ file }}">tail -f {{ file }}</span>
+                <div class="col-sm-6">
+                    <span class="navbar-brand text-overflow" title="{{ file }}">tail -f <span id="f-tail">{{ file }}</span></span>
                 </div>
                 <div class="col-sm-1 text-right">
                     <button type="button" class="btn btn-light btn-pause" data-toggle="button" aria-pressed="false" autocomplete="off"></button>
+                </div>
+{#                <div class="col-sm-1 align-items-center">#}
+{#                    <div class="navbar-form-custom">#}
+{#                        <input type="text" class="form-control query" placeholder="Line default: 100" tabindex="1">#}
+{#                    </div>#}
+{#                </div>#}
+                <div class="col-sm-2">
+                    <div class="navbar-form-custom">
+                        <select class="form-control" id="sl-file">
+                            {% for wl_file in files %}
+                                {% if file == wl_file %}
+                                    <option value="{{ wl_file }}" selected>{{ wl_file }}</option>
+                                {% else %}
+                                    <option value="{{ wl_file }}">{{ wl_file }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
                 <div class="col-sm-3">
                     <form class="navbar-form-custom" role="search" onkeypress="return event.keyCode != 13;">
@@ -37,20 +55,14 @@
     <script src="{{url_for('static', filename='assets/js/ansi_up.js')}}"></script>
     <script src="{{url_for('static', filename='assets/js/app.js')}}"></script>
     <script type="text/javascript">
-        var socket = io('/tail')
-        socket.on('connect', function() {
-            setInterval(function () {
-                socket.emit('msg')
-            }, 1000)
-        });
-
         window.load = App.init({
-            socket: socket,
+            socket: io('/tail'),
             container: document.getElementsByClassName('log')[0],
             filterInput: document.getElementsByClassName('query')[0],
             pauseBtn: document.getElementsByClassName('btn-pause')[0],
             topbar: document.getElementsByClassName('topbar')[0],
-            body: document.getElementsByTagName('body')[0]
+            body: document.getElementsByTagName('body')[0],
+            selectFile: document.getElementById('sl-file'),
         });
     </script>
 </body>
